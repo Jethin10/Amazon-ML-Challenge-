@@ -1,0 +1,7 @@
+dataset/train/*.tsv
+dataset/test/*.tsv
+.venv/
+__pycache__/
+*.pyc
+output/
+models/
