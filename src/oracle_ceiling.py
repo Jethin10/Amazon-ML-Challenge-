@@ -11,11 +11,14 @@ from v1 import DATASET, WORK, quoted_path
 
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--mode", choices=["pilot", "valid", "audit"], default="audit")
+    parser.add_argument("--mode", choices=["pilot", "valid", "audit", "audit2"], default="audit")
+    parser.add_argument("--version", choices=["base", "v3", "v4"], default="base")
     args = parser.parse_args()
-    bounds = {"pilot": (0, 2), "valid": (42, 50), "audit": (50, 60)}
+    bounds = {"pilot": (0, 2), "valid": (42, 50), "audit": (50, 60),
+              "audit2": (60, 70)}
     lo, hi = bounds[args.mode]
-    feature = WORK / f"train_{args.mode}_features.parquet"
+    suffix = "" if args.version == "base" else f"_{args.version}"
+    feature = WORK / f"train_{args.mode}{suffix}_features.parquet"
     con = duckdb.connect()
     con.execute("SET threads=4")
     con.execute("SET memory_limit='5GB'")

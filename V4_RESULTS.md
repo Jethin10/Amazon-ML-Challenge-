@@ -24,6 +24,12 @@ threshold choice. All splits use the same Source 2 and 3 search pool.
 | India macro F0.5 | 0.8854 | 0.9057 |
 | US macro F0.5 | 0.9335 | 0.9377 |
 
+The V4 candidate set has an oracle macro F0.5 ceiling of **0.9805** on this
+holdout: that is the score if a perfect classifier selected every available
+true candidate and no false candidate. The actual model scores 0.9249, so
+pair classification still leaves substantial room. This oracle calculation
+uses holdout labels for analysis and is not a deployable prediction method.
+
 The V4 classifier uses a threshold of 0.70 selected on buckets 42–49. Its
 best iteration was 766 of 800. The longer fit and the new candidate route
 both differ from V3, so the table measures the full pipeline change rather
