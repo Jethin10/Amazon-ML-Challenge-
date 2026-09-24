@@ -4,6 +4,7 @@ dataset/test/*.tsv
 __pycache__/
 *.pyc
 output/
+output_v3/
 submission/
 models/
 work/
