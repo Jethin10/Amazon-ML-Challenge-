@@ -14,32 +14,42 @@ from v1 import ROOT
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--team", default="Astralis")
+    parser.add_argument("--version", choices=["v1", "v3"], default="v1")
     args = parser.parse_args()
-    subprocess.run([sys.executable, str(ROOT / "src" / "validate_large.py")],
+    output_dir = ROOT / ("output" if args.version == "v1" else "output_v3")
+    subprocess.run([sys.executable, str(ROOT / "src" / "validate_large.py"),
+                    "--output-dir", str(output_dir)],
                    cwd=ROOT, check=True)
     submission = ROOT / "submission"
     submission.mkdir(exist_ok=True)
     slug = "".join(c if c.isalnum() or c in "-_" else "_" for c in args.team)
-    archive = submission / f"{slug}_submission.zip"
+    suffix = "" if args.version == "v1" else "_v3"
+    archive = submission / f"{slug}{suffix}_submission.zip"
     code_root = Path("code") / "business_entity_resolution"
-    manifest = {
-        ROOT / "output" / "matching_results.tsv": Path("output") / "matching_results.tsv",
-        ROOT / "output" / "candidate_pairs.tsv": Path("output") / "candidate_pairs.tsv",
-        ROOT / "Documentation_template.md": Path("Documentation_template.md"),
-        ROOT / "SOLUTION_README.md": code_root / "README.md",
-        ROOT / "requirements.txt": code_root / "requirements.txt",
-        ROOT / "models" / "v1_lgb.txt": code_root / "models" / "v1_lgb.txt",
-        ROOT / "models" / "v1_metrics.json": code_root / "models" / "v1_metrics.json",
-        ROOT / "utils" / "validate_submission.py": code_root / "utils" / "validate_submission.py",
-    }
+    methodology = (ROOT / "Documentation_template.md" if args.version == "v1"
+                   else ROOT / "V3_REPRODUCTION.md")
+    readme = (ROOT / "SOLUTION_README.md" if args.version == "v1"
+              else ROOT / "V3_REPRODUCTION.md")
+    manifest = [
+        (output_dir / "matching_results.tsv", Path("output") / "matching_results.tsv"),
+        (output_dir / "candidate_pairs.tsv", Path("output") / "candidate_pairs.tsv"),
+        (methodology, Path("Documentation_template.md")),
+        (readme, code_root / "README.md"),
+        (ROOT / "requirements.txt", code_root / "requirements.txt"),
+        (ROOT / "models" / f"{args.version}_lgb.txt", code_root / "models" / f"{args.version}_lgb.txt"),
+        (ROOT / "models" / f"{args.version}_metrics.json", code_root / "models" / f"{args.version}_metrics.json"),
+        (ROOT / "utils" / "validate_submission.py", code_root / "utils" / "validate_submission.py"),
+    ]
+    if args.version == "v3":
+        manifest.append((ROOT / "V3_RESULTS.md", code_root / "V3_RESULTS.md"))
     for source in (ROOT / "src").glob("*.py"):
-        manifest[source] = code_root / "src" / source.name
-    for source in manifest:
+        manifest.append((source, code_root / "src" / source.name))
+    for source, _ in manifest:
         if not source.is_file():
             raise FileNotFoundError(source)
     with zipfile.ZipFile(archive, "w", compression=zipfile.ZIP_DEFLATED,
                          compresslevel=3, allowZip64=True) as output:
-        for source, dest in manifest.items():
+        for source, dest in manifest:
             print(f"Packing {dest}", flush=True)
             output.write(source, dest.as_posix())
     with zipfile.ZipFile(archive) as result:

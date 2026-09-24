@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import csv
 import json
+import argparse
 from itertools import zip_longest
 from pathlib import Path
 
@@ -18,14 +19,18 @@ def read_source_ids(path: Path) -> set[str]:
 
 
 def main() -> None:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--output-dir", type=Path, default=ROOT / "output")
+    args = parser.parse_args()
+    output_dir = args.output_dir
     expected = read_source_ids(DATASET / "test" / "test_source1.tsv")
     target_ids = read_source_ids(DATASET / "test" / "test_source2.tsv")
     target_ids.update(read_source_ids(DATASET / "test" / "test_source3.tsv"))
     seen: set[str] = set()
     errors: list[str] = []
     candidate_count = match_count = empty_count = 0
-    matching = ROOT / "output" / "matching_results.tsv"
-    candidates = ROOT / "output" / "candidate_pairs.tsv"
+    matching = output_dir / "matching_results.tsv"
+    candidates = output_dir / "candidate_pairs.tsv"
     with matching.open(encoding="utf-8", newline="") as fm, candidates.open(
         encoding="utf-8", newline=""
     ) as fc:
@@ -80,7 +85,7 @@ def main() -> None:
         "empty_predictions": empty_count,
         "errors": errors,
     }
-    (ROOT / "output" / "validation_summary.json").write_text(
+    (output_dir / "validation_summary.json").write_text(
         json.dumps(report, indent=2), encoding="utf-8"
     )
     print(json.dumps(report, indent=2), flush=True)
