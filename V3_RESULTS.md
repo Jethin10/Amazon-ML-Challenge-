@@ -20,6 +20,12 @@ shared across these Source 1 splits.
 | India macro F0.5 | 0.8261 | 0.8834 |
 | US macro F0.5 | 0.9311 | 0.9357 |
 
+With perfect classification of the available V3 candidates, the holdout
+macro F0.5 ceiling is **0.9713**. We computed it from each S1 record's true
+link count and retrieved true-link count, scoring correct empty predictions
+for all true singletons. Thus reaching 0.98 macro F0.5 requires more true
+links to enter the candidate set, even with a perfect pair classifier.
+
 V3 uses a 0.70 threshold selected on the validation slice and the same
 LightGBM early prediction stopping setting as V1. These are local scores,
 not leaderboard scores. The test set contains France, which has no labeled
@@ -31,6 +37,14 @@ The user target of 98% recall has not been reached. The new route recovers
 913 extra links on the holdout while adding roughly 851,000 candidate pairs.
 Additional broad routes tested on the pilot slice had poor true-link yield
 per added candidate and were not included.
+
+An audit of the 5,528 missed links found that 5,044 belong to an S1 with at
+least one *other true link* already among the candidates. Among those 5,044,
+3,952 share a five-character address token with a retrieved true target and
+2,322 share the first five characters of the transliterated name key. This
+is an oracle analysis using labels to find anchors; it is not a measured
+production propagation score. It suggests testing a two-stage target-to-target
+candidate route using only high-confidence predicted anchors.
 
 The original V1 submission files remain in `output/`. V3 predictions go to
 `output_v3/` so an ongoing portal upload cannot be changed by this work.
