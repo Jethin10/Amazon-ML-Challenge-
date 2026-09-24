@@ -44,6 +44,7 @@ def fields(row: dict[str, str]) -> dict[str, str]:
         "addr_key": key(address),
         "city5": key(city)[:5],
         "addr_num": number.group() if number else "",
+        "all_numbers": set(NUMBER.findall(address)),
         "country": (row["country"] or "").strip().lower(),
     }
 
@@ -148,6 +149,10 @@ def main() -> None:
         summary["shared_name_token_number"] += bool(shared_name_tokens) and s["addr_num"] != "" and s["addr_num"] == t["addr_num"]
         summary["shared_address_token"] += bool(shared_address_tokens)
         summary["shared_address_token_name4"] += bool(shared_address_tokens) and s["name_key"][:4] == t["name_key"][:4]
+        shared_numbers = s["all_numbers"] & t["all_numbers"]
+        summary["shared_any_number"] += bool(shared_numbers)
+        summary["shared_3plus_number"] += any(len(value) >= 3 for value in shared_numbers)
+        summary["shared_any_number_address_token"] += bool(shared_numbers) and bool(shared_address_tokens)
         if len(examples) < 12 and (summary["total"] % 700 == 0):
             examples.append({
                 "s1_id": s1_id, "target_id": target_id,

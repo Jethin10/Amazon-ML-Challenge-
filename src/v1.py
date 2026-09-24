@@ -118,7 +118,7 @@ def make_work_s1(
 ) -> None:
     if part == "train":
         windows = {"pilot": (0, 2), "fit": (2, 42), "valid": (42, 50),
-                   "audit": (50, 60)}
+                   "audit": (50, 60), "audit2": (60, 70)}
         if mode not in windows:
             raise ValueError(f"Unsupported training mode: {mode}")
         lo, hi = windows[mode]
@@ -446,7 +446,7 @@ def main() -> None:
     parser.add_argument("command", choices=["prepare", "candidates", "features"])
     parser.add_argument("--part", choices=["train", "test"], required=True)
     parser.add_argument("--mode", default="pilot",
-                        choices=["pilot", "fit", "valid", "audit", "full"])
+                        choices=["pilot", "fit", "valid", "audit", "audit2", "full"])
     args = parser.parse_args()
     con = connect()
     try:
