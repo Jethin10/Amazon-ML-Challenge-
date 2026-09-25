@@ -23,6 +23,8 @@ source TSV files under `dataset/test/`. Use Python 3.14 and the pinned packages 
 .venv\Scripts\python.exe src/build_latin.py --part test
 .venv\Scripts\python.exe src/predict_v4.py --batches 20
 .venv\Scripts\python.exe src/validate_large.py --output-dir output_v4
+.venv\Scripts\python.exe src/package_code.py --version v4
+.venv\Scripts\python.exe src/package_submission.py --version v4 --team Astralis
 ```
 
 `predict_v4.py` writes `output_v4/matching_results.tsv` and
@@ -47,3 +49,15 @@ candidate recall and 0.9249 macro F0.5, compared with 92.73% and 0.9143
 for V3. The training data has no France labels, so this local score does
 not establish France performance. See `V4_RESULTS.md` for counts and
 per-country results.
+
+The repository includes the trained `models/v4_lgb.txt` and its threshold
+metadata. If using these files for inference, skip the training commands and
+run test preparation, inference, and validation. The full submission package
+includes both output TSVs and the filled `Documentation_template.md`.
+
+If the portal cannot process the 99,716,074-byte matching TSV, run
+`src/make_portal_variant.py --cap 10` to create the separately validated
+93,268,009-byte `output_v4_portal/matching_results.tsv`. This caps long
+prediction lists, mostly in France. The labeled holdout barely changes, but
+there are no France labels, so the variant's hidden score is unknown. Keep
+the original output as the primary result.

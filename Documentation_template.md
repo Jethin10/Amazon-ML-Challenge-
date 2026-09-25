@@ -1,8 +1,8 @@
-# ML Challenge 2026: business entity resolution solution
+# ML Challenge 2026: Astralis entity resolution solution
 
-**Team name:** Astralis
+**Team:** Astralis
 
-**Team members:**
+**Date:** 25 September 2026
 
 | Player | Organisation or college |
 | --- | --- |
@@ -10,104 +10,94 @@
 | Dakshanya Maddala | Texas A&M University |
 | Jethin kosaraju | Noida Institute of Engineering And Technology (NIET), Greater Noida |
 
-**Submission date:** 25 September 2026
+## 1. Task and result
 
-## 1. Summary
+For every Source 1 business, we return zero or more matching records from
+Sources 2 and 3. We generate a bounded candidate set, score each candidate
+pair with LightGBM, and select pairs with predicted probability at least
+0.70. The output includes every test Source 1 record, including France.
 
-We match each Source 1 business against records from Sources 2 and 3. A
-disk-backed DuckDB pipeline generates candidate pairs, then a LightGBM model
-scores them using name and address similarity. On a separate labeled holdout,
-the pipeline reaches macro F0.5 of 0.8892 with 91.60% candidate recall. The
-test set has no public labels, so this is a local score.
+On a labeled Source 1 holdout reserved from route selection and model
+training, V4 achieved **94.58% candidate recall** and **0.9249 macro F0.5**.
+These are local scores. The test set has no labels, and the provided labeled
+data has no France examples, so we cannot claim a France or private
+leaderboard score from this evaluation.
 
-## 2. Problem analysis and strategy
+## 2. Candidate generation
 
-Each Source 1 business can match zero, one, or many Source 2 and 3 records.
-Names and addresses contain reordered words, spelling changes, legal suffixes,
-trade names, missing fields, address abbreviations, and leading zeros in
-building numbers. Some India records use different scripts. The labeled data
-contains US and India records; test also contains France records. Our code
-treats country as an open string field and includes every test Source 1 row.
+All retrieval routes require equal country labels. The pipeline normalizes
+name and address punctuation, case, accents, and spacing. It also uses local
+`anyascii` transliteration so names in different scripts can share Latin
+features. No external business database or lookup service is used.
 
-Comparing every record pair is infeasible at this scale. We first retrieve a
-small candidate set using several keys. The model then weighs agreement and
-conflicts across the two fields. We select the final cutoff for macro F0.5,
-which rewards precision and includes true singletons.
+We union and deduplicate several complementary routes:
 
-## 3. Candidate generation
+1. Exact normalized name or address.
+2. Selective name prefixes combined with city or building number, a city
+   plus number, and an address prefix. Broad blocks are capped.
+3. Rare address words, optionally combined with a name prefix or number.
+4. Rare name words with a number, with target-frequency caps.
+5. V4's added route: any shared address number and address word of at least
+   five characters. The word occurs in at most 10,000 targets. We keep this
+   route's pair when the transliterated names have Jaro-Winkler similarity at
+   least 0.70 or either name is missing. A materialized target word-number
+   index keeps the join practical.
 
-We lowercase text, remove accents and punctuation, and derive normalized
-name, address, city, and first building-number fields. Every route requires
-the same country. The routes are:
+The deduplicated candidate set is exactly what the pair model scores and is
+written to `candidate_pairs.tsv`. On the fresh labeled holdout, it contains
+2,839,414 pairs for 21,921 Source 1 entities: 129.5 candidates per S1. It
+retrieves 71,975 of 76,101 true links, or 94.58% candidate recall. The
+prior V3 route retrieved 70,569 true links from 2,626,411 candidates on the
+same holdout.
 
-1. Exact normalized name and exact normalized address.
-2. First five name characters; first four name characters with city or number;
-   city with number; and first eight address characters. We skip target blocks
-   larger than 100 for these broad routes.
-3. The rarest address word of at least five characters when its target
-   frequency is at most 100 in the country.
-4. Up to three rare address words paired with the first four name characters
-   or a building number. Each word can appear in up to 1,000 targets.
-5. Up to two name words paired with a building number, using the same 1,000
-   target-frequency limit.
+## 3. Pair model and features
 
-We normalize leading zeros when comparing building numbers in the added
-address-word route. The pipeline deduplicates the union of all routes. It
-outputs this exact candidate set to `candidate_pairs.tsv` before model
-scoring.
+The classifier is LightGBM 4.7.0, trained on pairs produced by these exact
+candidate routes. Features compare normalized names and addresses using
+Jaro-Winkler and edit similarity, sorted-word similarity, token overlap,
+containment and exact-match flags, lengths, city agreement, building-number
+agreement or conflict, missing-field flags, and a Source 3 flag. The V4
+feature set includes transliterated name and address comparisons, plus
+overlap or conflict across **all** address numbers rather than only the first.
 
-On the separate labeled holdout, it generates 1,816,215 pairs for 22,144
-Source 1 records, an average of 82.0 candidates each. Those pairs include
-70,240 of 76,681 ground-truth links, so candidate recall is 91.60%.
+The fit uses hash buckets 2–41 of Source 1 IDs. Buckets 42–49 select the
+threshold. V4 uses learning rate 0.05, 31 leaves, minimum leaf size 150,
+feature fraction 0.85, and early stopping on validation loss. The selected
+model's best iteration was 766 of a maximum 800. The threshold is 0.70.
+Test inference uses LightGBM prediction early stopping with frequency 10
+and margin 10, matching the audited setting.
 
-## 4. Matching model
+Buckets 50–59 informed the new retrieval route. Buckets 60–69 were then
+held out from route selection, fitting, and threshold selection. All splits
+search the same Source 2 and 3 pool. On the fresh holdout, macro F0.5 was
+0.9249 for V4 versus 0.9143 for V3. Of 1,224 true singletons, V4 returned
+the correct empty list for 1,142. India macro F0.5 was 0.9057 and US macro
+F0.5 was 0.9377. The candidate set's oracle macro F0.5 ceiling is 0.9805;
+the actual model does not reach that ceiling.
 
-The pair classifier is LightGBM 4.7.0 with 350 boosting rounds, 31 leaves,
-learning rate 0.06, and minimum leaf size 150. Inputs include Jaro-Winkler
-and edit similarity for names, Jaro-Winkler similarity for addresses, sorted
-word similarity for both fields, token overlap for both fields, exact and
-containment flags, name and address length ratios, city and building-number
-agreement or conflict, missing-field flags, and a Source 3 flag.
+## 4. Full inference, validation, and packaging
 
-Source 1 IDs are split by a stable hash. Buckets 2 through 41 fit the model;
-buckets 42 through 49 select the cutoff. Buckets 50 through 59 form a separate
-holdout and were not used to fit the model or choose the cutoff. We calculate
-F0.5 for each Source 1 record against all its ground-truth links, including
-true links missed by blocking, then average across Source 1 records. Correct
-empty answers for true singletons score 1. We selected cutoff 0.60 on the
-development split and kept it fixed on the holdout and test data.
+V4 wrote 1,732,544 Source 1 rows, 201,717,297 candidate pairs, and
+5,994,946 selected matches. `output_v4/matching_results.tsv` is the file
+scored on the leaderboard. `output_v4/candidate_pairs.tsv` records the
+exact pairs scored by the model and is included in the final package.
 
-Inference uses LightGBM's `pred_early_stop` with frequency 10 and margin 10.
-On the separate holdout this reduced prediction time and gave F0.5 of 0.8892,
-compared with 0.8890 for standard prediction at the same cutoff.
+Our streaming full-file validator confirmed every required Source 1 row,
+valid target IDs, no duplicate rows or IDs, and every selected match within
+its candidate list. It reported no errors. The organizers' matching-file
+validator also passed with ID checks. These checks establish format and
+coverage, not hidden-label accuracy.
 
-## 5. Results and error analysis
+The optional `src/make_portal_variant.py --cap 10` produces a smaller
+leaderboard TSV if the portal cannot process the original file. It caps only
+lists longer than 10. On the labeled holdout, this cap changed macro F0.5
+from 0.924916 to 0.924921. Most removed test predictions are in France,
+which lacks labels, so the cap's hidden score is uncertain. The original
+uncapped file remains our primary model output.
 
-| Measure | Development split | Separate holdout |
-| --- | ---: | ---: |
-| Source 1 records | 18,057 | 22,144 |
-| Candidate recall | 91.51% | 91.60% |
-| Average candidates per Source 1 | 81.2 | 82.0 |
-| Macro F0.5 with submission inference setting | 0.8903 | 0.8892 |
-
-The holdout includes 1,209 true singletons; 1,044 received correct empty
-predictions. By country, India reached candidate recall 87.64% and macro F0.5
-0.8261. The US reached 94.24% and 0.9311. The largest remaining limitation
-is candidate generation for India, where script changes, missing fields, and
-address variants can prevent a true pair from reaching the classifier. France
-has no labeled local score because it appears only in the test data.
-
-## 6. Reproduction and data use
-
-All identity information comes from the provided challenge files. We do not
-look up businesses through external APIs, registries, search engines, or
-geocoding services. `code/business_entity_resolution/README.md` gives the
-commands from raw TSVs to both output files. The code uses DuckDB for
-disk-backed candidate retrieval and feature calculation, and LightGBM for
-model training and prediction. The supplied `models/v1_lgb.txt` also permits
-inference without retraining.
-
-The two submitted TSVs are `output/matching_results.tsv` and
-`output/candidate_pairs.tsv`. Every final match comes from the submitted
-candidate set. The included validator checks row coverage, IDs, duplicates,
-and this subset rule before packaging.
+The `code/business_entity_resolution/README.md` in the package gives the
+commands from the supplied raw TSVs through training, inference, and
+validation. Dependencies are pinned in `requirements.txt`. The trained
+`models/v4_lgb.txt` and threshold metadata are included. The pipeline uses
+only challenge files for business identities; it does not query external
+APIs, registries, search engines, or geocoding services.

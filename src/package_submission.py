@@ -26,8 +26,9 @@ def main() -> None:
     suffix = "" if args.version == "v1" else f"_{args.version}"
     archive = submission / f"{slug}{suffix}_submission.zip"
     code_root = Path("code") / "business_entity_resolution"
-    methodology = (ROOT / "Documentation_template.md" if args.version == "v1"
-                   else ROOT / f"{args.version.upper()}_REPRODUCTION.md")
+    methodology = (ROOT / "V1_DOCUMENTATION.md" if args.version == "v1"
+                   else ROOT / "V3_REPRODUCTION.md" if args.version == "v3"
+                   else ROOT / "Documentation_template.md")
     readme = (ROOT / "SOLUTION_README.md" if args.version == "v1"
               else methodology)
     manifest = [

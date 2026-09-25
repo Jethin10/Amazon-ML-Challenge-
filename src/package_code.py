@@ -15,11 +15,13 @@ def main() -> None:
             else f"Astralis_{args.version}_code.zip")
     output = ROOT / "submission" / name
     code_root = Path("code") / "business_entity_resolution"
-    method = ("Documentation_template.md" if args.version == "v1"
-              else f"{args.version.upper()}_REPRODUCTION.md")
+    method = ("V1_DOCUMENTATION.md" if args.version == "v1"
+              else "V3_REPRODUCTION.md" if args.version == "v3"
+              else "Documentation_template.md")
     files = [
         (ROOT / method, Path("Documentation_template.md")),
-        (ROOT / ("SOLUTION_README.md" if args.version == "v1" else method),
+        (ROOT / ("SOLUTION_README.md" if args.version == "v1"
+                 else f"{args.version.upper()}_REPRODUCTION.md"),
          code_root / "README.md"),
         (ROOT / "requirements.txt", code_root / "requirements.txt"),
         (ROOT / "models" / f"{args.version}_lgb.txt", code_root / "models" / f"{args.version}_lgb.txt"),
