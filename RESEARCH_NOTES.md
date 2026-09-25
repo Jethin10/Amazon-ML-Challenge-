@@ -28,3 +28,13 @@ Source 1 examples, but cannot measure the France domain shift because the
 provided labeled training data contains no France examples. We should treat
 the local score and any public leaderboard result as incomplete estimates of
 the final private score.
+
+The [multilingual MiniLM cross encoder](https://huggingface.co/cross-encoder/mmarco-mMiniLMv2-L12-H384-v1)
+is an Apache 2.0 checkpoint with about 100 million parameters and 15 listed
+languages. It is a plausible small reranker for a timed pilot on the 4 GB GPU,
+but passage relevance pretraining does not establish entity matching gains.
+Before using it, benchmark 10,000 representative pairs and compare macro
+F0.5 on a fresh holdout. A full 1–2 million pair rerank could take hours at
+this machine's unmeasured throughput. The
+[English MiniLM L6 checkpoint](https://huggingface.co/cross-encoder/ms-marco-MiniLM-L6-v2)
+is a smaller Apache 2.0 speed comparison, but lacks multilingual coverage.
