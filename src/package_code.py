@@ -20,9 +20,17 @@ V5_SOURCES = (
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--version", choices=["v1", "v3", "v4", "v5"], default="v1")
+    parser.add_argument("--france-threshold", type=float,
+                        help="Include the France postprocessing step for V5")
     args = parser.parse_args()
+    if args.france_threshold is not None and args.version != "v5":
+        parser.error("--france-threshold requires --version v5")
+    if args.france_threshold is not None and not 0.625 < args.france_threshold < 1:
+        parser.error("France threshold must be between 0.625 and 1")
+    tag = (f"_france_{round(args.france_threshold * 1000):03d}"
+           if args.france_threshold is not None else "")
     name = ("Astralis_code.zip" if args.version == "v1"
-            else f"Astralis_{args.version}_code.zip")
+            else f"Astralis_{args.version}{tag}_code.zip")
     output = ROOT / "submission" / name
     code_root = Path("code") / "business_entity_resolution"
     method = ("V1_DOCUMENTATION.md" if args.version == "v1"
@@ -46,6 +54,8 @@ def main() -> None:
         files.append((ROOT / "models" / "v5_audit3_metrics.json",
                       code_root / "models" / "v5_audit3_metrics.json"))
         sources = [ROOT / "src" / name for name in V5_SOURCES]
+        if args.france_threshold is not None:
+            sources.append(ROOT / "src" / "make_france_threshold_variant.py")
     else:
         sources = list((ROOT / "src").glob("*.py"))
     files.extend((source, code_root / "src" / source.name) for source in sources)

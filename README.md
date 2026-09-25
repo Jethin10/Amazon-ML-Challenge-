@@ -1,10 +1,11 @@
 # Astralis: Amazon ML Challenge 2026
 
-This repository contains our business entity resolution solution. The current
-submission is **V5**: it retrieves Source 2 and Source 3 candidates for every
-Source 1 business, scores the pairs with LightGBM, and writes the two required
-TSVs. The supplied challenge dataset and generated outputs stay local; the
-trained V5 model, source, and pinned dependencies are in Git.
+This repository contains our business entity resolution solution. V5 retrieves
+Source 2 and Source 3 candidates for every Source 1 business, scores the pairs
+with LightGBM, and writes the two required TSVs. The best portal-evaluated
+output currently raises the France threshold from 0.625 to 0.80 while keeping
+the US and India predictions unchanged. The supplied challenge dataset and
+generated outputs stay local; the trained V5 model and source are in Git.
 
 ## Current result
 
@@ -17,9 +18,10 @@ trained V5 model, source, and pinned dependencies are in Git.
 
 The fresh holdout has 21,878 Source 1 records and 76,167 true links. It was
 not used to fit V5 or choose its threshold. These are **local** results, not a
-leaderboard score. The V4 public submission scored 0.896. Training labels
-cover the US and India; the test set also contains France, so its accuracy
-cannot be measured locally. See [V5_RESULTS.md](V5_RESULTS.md) for details.
+leaderboard score. Public submissions scored 0.896 for V4, 0.907 for V5, and
+0.913 for the France 0.80 variant. Training labels cover the US and India;
+the test set also contains France, so its accuracy cannot be measured locally.
+See [V5_RESULTS.md](V5_RESULTS.md) for details.
 
 ## Upload files
 
@@ -27,15 +29,16 @@ After inference, use the following **local** files. They are ignored by Git:
 
 | Portal field | File |
 | --- | --- |
-| Upload Matching Results File | `output_v5/matching_results.tsv` |
-| Upload Code File | `submission/Astralis_v5_code.zip` |
-| Final package, when requested | `submission/Astralis_v5_submission.zip` |
+| Upload Matching Results File | `output_v6_france_800/matching_results.tsv` |
+| Upload Code File | `submission/Astralis_v5_france_800_code.zip` |
+| Final package, when requested | `submission/Astralis_v5_france_800_submission.zip` |
 
 The matching TSV has exactly 1,732,544 Source 1 rows. The candidate TSV is
-`output_v5/candidate_pairs.tsv`; it is included in the
-final package and is **not** the leaderboard prediction upload. The small code
-ZIP contains the trained model and reproducible source. The full package also
-contains both output TSVs and the methodology document.
+`output_v6_france_800/candidate_pairs.tsv`; it is the same candidate set as
+V5 and is **not** the leaderboard prediction upload. The France output passed
+the full structural validator. Generate it with
+`src/make_france_threshold_variant.py --threshold 0.8` after V5 inference.
+The France code ZIP contains the V5 model and the adjustment script.
 
 ## Reproduce V5
 
@@ -50,6 +53,15 @@ root, validate the generated outputs and build the two packages with:
 .venv\Scripts\python.exe src/validate_large.py --output-dir output_v5
 .venv\Scripts\python.exe src/package_code.py --version v5
 .venv\Scripts\python.exe src/package_submission.py --version v5 --team Astralis
+```
+
+For the portal-evaluated France variant, run:
+
+```powershell
+.venv\Scripts\python.exe src/make_france_threshold_variant.py --threshold 0.8
+.venv\Scripts\python.exe src/validate_large.py --output-dir output_v6_france_800
+.venv\Scripts\python.exe src/package_code.py --version v5 --france-threshold 0.8
+.venv\Scripts\python.exe src/package_submission.py --version v5 --france-threshold 0.8 --team Astralis --already-validated
 ```
 
 The full-file validator confirmed all 1,732,544 rows, valid S2/S3 IDs, no
