@@ -38,3 +38,31 @@ F0.5 on a fresh holdout. A full 1–2 million pair rerank could take hours at
 this machine's unmeasured throughput. The
 [English MiniLM L6 checkpoint](https://huggingface.co/cross-encoder/ms-marco-MiniLM-L6-v2)
 is a smaller Apache 2.0 speed comparison, but lacks multilingual coverage.
+
+## Measured follow-up (26 September)
+
+We fine-tuned the multilingual MiniLM model for one epoch on 53,150 selected
+validation pairs (25,150 matches), using name and address text only. The run
+took 1,484 seconds on the RTX 2050. The blend adds 0.6 times the reranker logit
+to the V5 probability logit. We selected this weight on audit2, then evaluated
+the separate audit3 split:
+
+| Audit3 entity-level macro F0.5 | Score |
+| --- | ---: |
+| V5 baseline | 0.93675 |
+| Rerank saved V5 links only | 0.94728 |
+| Rerank all V5 pairs with scores from 0.05 to 0.98 | 0.95956 |
+
+The selected-link strategy is practical with the completed test inference. The
+larger experimental gain requires rescoring lower-probability pairs across the
+full candidate set. Neither local result measures France, which has no labels.
+The complete selected-link V6 output scored **0.927** on the public portal,
+up from **0.913** for the France-threshold V5 variant.
+Audit3 was used for earlier exploratory diagnostics, so these local numbers
+are a useful check rather than an untouched final test estimate.
+
+V5's candidate-set oracle is 0.97958 on audit3. Character TF-IDF address
+retrieval found 801 new true India pairs among 126,049 new pairs, and 784 new
+true US pairs among 195,780 new pairs. Those routes can raise the oracle but
+need a high-precision classifier and a faster full-test retrieval design before
+they can be used in a challenge submission.

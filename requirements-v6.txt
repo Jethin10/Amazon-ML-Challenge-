@@ -1,0 +1,11 @@
+--extra-index-url https://download.pytorch.org/whl/cu130
+anyascii==0.3.3
+duckdb==1.5.5
+lightgbm==4.7.0
+numpy==2.5.3
+pandas==3.0.6
+pyarrow==25.0.1
+rapidfuzz==3.14.6
+scipy==1.18.1
+torch==2.14.0+cu130
+transformers==5.17.0

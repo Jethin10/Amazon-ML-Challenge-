@@ -2,24 +2,24 @@
 
 This repository contains our business entity resolution solution. V5 retrieves
 Source 2 and Source 3 candidates for every Source 1 business, scores the pairs
-with LightGBM, and writes the two required TSVs. The best portal-evaluated
-output currently raises the France threshold from 0.625 to 0.80 while keeping
-the US and India predictions unchanged. The supplied challenge dataset and
-generated outputs stay local; the trained V5 model and source are in Git.
+with LightGBM, and writes the two required TSVs. V6 reranks selected US and
+India links with a multilingual transformer and uses a 0.80 France threshold.
+The supplied challenge dataset and generated outputs stay local.
 
 ## Current result
 
-| Measure | V4 | V5 |
-| --- | ---: | ---: |
-| Candidate recall on fresh labeled holdout | 94.48% | 94.48% |
-| Macro F0.5 on the same holdout | 0.92402 | **0.93675** |
-| India macro F0.5 | 0.90095 | **0.91454** |
-| US macro F0.5 | 0.93933 | **0.95148** |
+| Measure | V4 | V5 | V6 selected links |
+| --- | ---: | ---: | ---: |
+| Candidate recall on labeled holdout | 94.48% | 94.48% | 94.48% |
+| Macro F0.5 on the same holdout | 0.92402 | 0.93675 | **0.94728** |
+| India macro F0.5 | 0.90095 | 0.91454 | **0.93049** |
+| US macro F0.5 | 0.93933 | 0.95148 | **0.95842** |
 
-The fresh holdout has 21,878 Source 1 records and 76,167 true links. It was
-not used to fit V5 or choose its threshold. These are **local** results, not a
+The holdout has 21,878 Source 1 records and 76,167 true links. It was
+not used to fit V5 or choose V6's numerical blend settings, but was used for
+earlier exploratory diagnostics. These are **local** results, not a
 leaderboard score. Public submissions scored 0.896 for V4, 0.907 for V5, and
-0.913 for the France 0.80 variant. Training labels cover the US and India;
+0.913 for the France 0.80 variant, and **0.927 for V6**. Training labels cover the US and India;
 the test set also contains France, so its accuracy cannot be measured locally.
 See [V5_RESULTS.md](V5_RESULTS.md) for details.
 
@@ -29,16 +29,15 @@ After inference, use the following **local** files. They are ignored by Git:
 
 | Portal field | File |
 | --- | --- |
-| Upload Matching Results File | `output_v6_france_800/matching_results.tsv` |
-| Upload Code File | `submission/Astralis_v5_france_800_code.zip` |
-| Final package, when requested | `submission/Astralis_v5_france_800_submission.zip` |
+| Upload Matching Results File | `output_v6_reranker_selected/matching_results.tsv` |
+| Upload Code File | `submission/Astralis_v6_code.zip` |
+| Final package, when requested | `submission/Astralis_v6_submission.zip` |
 
 The matching TSV has exactly 1,732,544 Source 1 rows. The candidate TSV is
-`output_v6_france_800/candidate_pairs.tsv`; it is the same candidate set as
-V5 and is **not** the leaderboard prediction upload. The France output passed
-the full structural validator. Generate it with
-`src/make_france_threshold_variant.py --threshold 0.8` after V5 inference.
-The France code ZIP contains the V5 model and the adjustment script.
+`output_v6_reranker_selected/candidate_pairs.tsv`; it is the same candidate set as
+V5 and is **not** the leaderboard prediction upload. The V6 output passed
+the full structural validator. See [V6_REPRODUCTION.md](V6_REPRODUCTION.md)
+for inference, validation, and packaging commands.
 
 ## Reproduce V5
 
