@@ -22,6 +22,7 @@ source TSV files under `dataset/test/`. Use Python 3.14 and the pinned packages 
 .venv\Scripts\python.exe src/v1.py prepare --part test
 .venv\Scripts\python.exe src/build_latin.py --part test
 .venv\Scripts\python.exe src/predict_v3.py --batches 20
+.venv\Scripts\python.exe src/validate_large.py --output-dir output_v3
 ```
 
 `predict_v3.py` writes `output_v3/matching_results.tsv` and

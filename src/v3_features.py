@@ -17,9 +17,9 @@ EXTRA_FEATURE_NAMES = [
 ALL_FEATURE_NAMES = FEATURE_NAMES + EXTRA_FEATURE_NAMES
 
 
-def enrich(con, part: str, mode: str):
+def enrich(con, part: str, mode: str, output_version: str = "v3"):
     source = WORK / f"{part}_{mode}_features.parquet"
-    destination = WORK / f"{part}_{mode}_v3_features.parquet"
+    destination = WORK / f"{part}_{mode}_{output_version}_features.parquet"
     tick = time.monotonic()
     con.execute(
         f"""
@@ -72,9 +72,10 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--part", choices=["train", "test"], required=True)
     parser.add_argument("--mode", required=True)
+    parser.add_argument("--version", choices=["v3", "v4"], default="v3")
     args = parser.parse_args()
     connection = connect()
     try:
-        enrich(connection, args.part, args.mode)
+        enrich(connection, args.part, args.mode, args.version)
     finally:
         connection.close()

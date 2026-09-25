@@ -16,9 +16,10 @@ from v3_features import ALL_FEATURE_NAMES as FEATURE_NAMES
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--early-stop", action="store_true")
+    parser.add_argument("--mode", choices=["audit", "audit2"], default="audit")
     args = parser.parse_args()
     con = connect()
-    make_work_s1(con, "train", "audit")
+    make_work_s1(con, "train", args.mode)
     rows = con.execute("SELECT entity_id, country FROM work_s1 ORDER BY entity_id").fetchall()
     counts = dict(con.execute("""
         SELECT g.s1_id, count(*)
@@ -30,7 +31,7 @@ def main() -> None:
     country = np.array([row[1] for row in rows])
     truth = np.array([counts.get(entity_id, 0) for entity_id in ids])
     position = {entity_id: i for i, entity_id in enumerate(ids)}
-    frame = pd.read_parquet(WORK / "train_audit_v3_features.parquet")
+    frame = pd.read_parquet(WORK / f"train_{args.mode}_v3_features.parquet")
     model = lgb.Booster(model_file=str(ROOT / "models" / "v3_lgb.txt"))
     threshold = json.loads((ROOT / "models" / "v3_metrics.json").read_text())["threshold"]
     x = frame[FEATURE_NAMES].to_numpy(dtype=np.float32, copy=True)
@@ -71,8 +72,8 @@ def main() -> None:
             "true_links": int(truth[mask].sum()),
             "candidate_recall": float(labels[country[group] == value].sum() / truth[mask].sum()),
         }
-    path = ROOT / "models" / ("v3_audit_early_metrics.json" if args.early_stop
-                             else "v3_audit_metrics.json")
+    path = ROOT / "models" / (f"v3_{args.mode}_early_metrics.json" if args.early_stop
+                             else f"v3_{args.mode}_metrics.json")
     path.write_text(json.dumps(report, indent=2), encoding="utf-8")
     print(json.dumps(report, indent=2), flush=True)
 

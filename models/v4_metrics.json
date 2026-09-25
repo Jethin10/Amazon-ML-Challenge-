@@ -1,0 +1,362 @@
+{
+  "fit_pairs": 11390093,
+  "fit_positive_pairs": 287822,
+  "valid_pairs": 2321033,
+  "valid_positive_candidates": 59008,
+  "valid_true_pairs": 62413,
+  "valid_entities": 18057,
+  "valid_singletons": 1056,
+  "candidate_recall": 0.9454440581289154,
+  "best_iteration": 766,
+  "threshold": 0.7000000000000001,
+  "macro_f05": 0.9263668062284828,
+  "singleton_accuracy": 0.9498106060606061,
+  "predicted_matches_per_entity": 2.959350944232154,
+  "threshold_grid": [
+    {
+      "threshold": 0.02,
+      "macro_f05": 0.6947983881125043,
+      "singleton_accuracy": 0.15056818181818182,
+      "matches_per_entity": 5.242565210167802
+    },
+    {
+      "threshold": 0.04,
+      "macro_f05": 0.7388955069923832,
+      "singleton_accuracy": 0.24337121212121213,
+      "matches_per_entity": 4.786675527496262
+    },
+    {
+      "threshold": 0.06,
+      "macro_f05": 0.7649506380116268,
+      "singleton_accuracy": 0.3134469696969697,
+      "matches_per_entity": 4.541728969374757
+    },
+    {
+      "threshold": 0.08,
+      "macro_f05": 0.7886498275912187,
+      "singleton_accuracy": 0.3664772727272727,
+      "matches_per_entity": 4.294677964224401
+    },
+    {
+      "threshold": 0.1,
+      "macro_f05": 0.8085146126977257,
+      "singleton_accuracy": 0.4128787878787879,
+      "matches_per_entity": 4.089937420390984
+    },
+    {
+      "threshold": 0.12000000000000001,
+      "macro_f05": 0.8232321015646625,
+      "singleton_accuracy": 0.45075757575757575,
+      "matches_per_entity": 3.954699008694689
+    },
+    {
+      "threshold": 0.13999999999999999,
+      "macro_f05": 0.8341944200369906,
+      "singleton_accuracy": 0.4952651515151515,
+      "matches_per_entity": 3.86620147311292
+    },
+    {
+      "threshold": 0.16,
+      "macro_f05": 0.8574794739619664,
+      "singleton_accuracy": 0.5653409090909091,
+      "matches_per_entity": 3.6408595004707314
+    },
+    {
+      "threshold": 0.18,
+      "macro_f05": 0.8814292782707319,
+      "singleton_accuracy": 0.65625,
+      "matches_per_entity": 3.4548928393420835
+    },
+    {
+      "threshold": 0.19999999999999998,
+      "macro_f05": 0.8865276869138505,
+      "singleton_accuracy": 0.6818181818181818,
+      "matches_per_entity": 3.4138007420944785
+    },
+    {
+      "threshold": 0.22,
+      "macro_f05": 0.8910458014472591,
+      "singleton_accuracy": 0.696969696969697,
+      "matches_per_entity": 3.376640637979731
+    },
+    {
+      "threshold": 0.24,
+      "macro_f05": 0.8955013634301499,
+      "singleton_accuracy": 0.7206439393939394,
+      "matches_per_entity": 3.344409370327297
+    },
+    {
+      "threshold": 0.26,
+      "macro_f05": 0.8998515809940661,
+      "singleton_accuracy": 0.7443181818181818,
+      "matches_per_entity": 3.312731904524561
+    },
+    {
+      "threshold": 0.28,
+      "macro_f05": 0.9035402128719098,
+      "singleton_accuracy": 0.7632575757575758,
+      "matches_per_entity": 3.2836573074154067
+    },
+    {
+      "threshold": 0.30000000000000004,
+      "macro_f05": 0.9071517600195594,
+      "singleton_accuracy": 0.7859848484848485,
+      "matches_per_entity": 3.258182422329291
+    },
+    {
+      "threshold": 0.32,
+      "macro_f05": 0.9092512503988762,
+      "singleton_accuracy": 0.7964015151515151,
+      "matches_per_entity": 3.2342028022373595
+    },
+    {
+      "threshold": 0.34,
+      "macro_f05": 0.9118810665167109,
+      "singleton_accuracy": 0.8115530303030303,
+      "matches_per_entity": 3.2112200254748853
+    },
+    {
+      "threshold": 0.36000000000000004,
+      "macro_f05": 0.9140469371873717,
+      "singleton_accuracy": 0.8248106060606061,
+      "matches_per_entity": 3.1898986542615053
+    },
+    {
+      "threshold": 0.38,
+      "macro_f05": 0.9155873573650015,
+      "singleton_accuracy": 0.8371212121212122,
+      "matches_per_entity": 3.17029406878219
+    },
+    {
+      "threshold": 0.4,
+      "macro_f05": 0.9169503024460548,
+      "singleton_accuracy": 0.8475378787878788,
+      "matches_per_entity": 3.1546768566207013
+    },
+    {
+      "threshold": 0.42000000000000004,
+      "macro_f05": 0.9186116606095581,
+      "singleton_accuracy": 0.8551136363636364,
+      "matches_per_entity": 3.1385612227944844
+    },
+    {
+      "threshold": 0.44,
+      "macro_f05": 0.9198870074078394,
+      "singleton_accuracy": 0.8645833333333334,
+      "matches_per_entity": 3.1236085728526333
+    },
+    {
+      "threshold": 0.46,
+      "macro_f05": 0.9213670002465539,
+      "singleton_accuracy": 0.8740530303030303,
+      "matches_per_entity": 3.1087666832807224
+    },
+    {
+      "threshold": 0.48000000000000004,
+      "macro_f05": 0.922466783011485,
+      "singleton_accuracy": 0.884469696969697,
+      "matches_per_entity": 3.0943124550035996
+    },
+    {
+      "threshold": 0.5,
+      "macro_f05": 0.9234102455630947,
+      "singleton_accuracy": 0.8929924242424242,
+      "matches_per_entity": 3.0821288143102397
+    },
+    {
+      "threshold": 0.52,
+      "macro_f05": 0.9244004027660361,
+      "singleton_accuracy": 0.9015151515151515,
+      "matches_per_entity": 3.0684499086226946
+    },
+    {
+      "threshold": 0.54,
+      "macro_f05": 0.9247461563924402,
+      "singleton_accuracy": 0.9043560606060606,
+      "matches_per_entity": 3.0564324084842442
+    },
+    {
+      "threshold": 0.56,
+      "macro_f05": 0.9253363747552582,
+      "singleton_accuracy": 0.9081439393939394,
+      "matches_per_entity": 3.0445256687157336
+    },
+    {
+      "threshold": 0.5800000000000001,
+      "macro_f05": 0.9253507525280124,
+      "singleton_accuracy": 0.9109848484848485,
+      "matches_per_entity": 3.0324527883923134
+    },
+    {
+      "threshold": 0.6,
+      "macro_f05": 0.9254605268245846,
+      "singleton_accuracy": 0.9147727272727273,
+      "matches_per_entity": 3.0212106108434402
+    },
+    {
+      "threshold": 0.62,
+      "macro_f05": 0.9258650443512932,
+      "singleton_accuracy": 0.9204545454545454,
+      "matches_per_entity": 3.0095253918148086
+    },
+    {
+      "threshold": 0.64,
+      "macro_f05": 0.9261857670090725,
+      "singleton_accuracy": 0.9308712121212122,
+      "matches_per_entity": 2.9966218087168413
+    },
+    {
+      "threshold": 0.66,
+      "macro_f05": 0.9263138528917864,
+      "singleton_accuracy": 0.9365530303030303,
+      "matches_per_entity": 2.984493548208451
+    },
+    {
+      "threshold": 0.68,
+      "macro_f05": 0.9261194938862752,
+      "singleton_accuracy": 0.9393939393939394,
+      "matches_per_entity": 2.971700725480423
+    },
+    {
+      "threshold": 0.7000000000000001,
+      "macro_f05": 0.9263668062284828,
+      "singleton_accuracy": 0.9498106060606061,
+      "matches_per_entity": 2.959350944232154
+    },
+    {
+      "threshold": 0.7200000000000001,
+      "macro_f05": 0.9262533223683856,
+      "singleton_accuracy": 0.9535984848484849,
+      "matches_per_entity": 2.947333444093703
+    },
+    {
+      "threshold": 0.74,
+      "macro_f05": 0.9254595787959788,
+      "singleton_accuracy": 0.9564393939393939,
+      "matches_per_entity": 2.9347067619205847
+    },
+    {
+      "threshold": 0.76,
+      "macro_f05": 0.9252132652387823,
+      "singleton_accuracy": 0.9602272727272727,
+      "matches_per_entity": 2.9208063354931606
+    },
+    {
+      "threshold": 0.78,
+      "macro_f05": 0.9245120250496879,
+      "singleton_accuracy": 0.9630681818181818,
+      "matches_per_entity": 2.9052998837016117
+    },
+    {
+      "threshold": 0.8,
+      "macro_f05": 0.9235405509618971,
+      "singleton_accuracy": 0.9696969696969697,
+      "matches_per_entity": 2.8895719111701834
+    },
+    {
+      "threshold": 0.8200000000000001,
+      "macro_f05": 0.922222090621887,
+      "singleton_accuracy": 0.9725378787878788,
+      "matches_per_entity": 2.869911945505898
+    },
+    {
+      "threshold": 0.8400000000000001,
+      "macro_f05": 0.9205968849330648,
+      "singleton_accuracy": 0.978219696969697,
+      "matches_per_entity": 2.8484244337376086
+    },
+    {
+      "threshold": 0.86,
+      "macro_f05": 0.9185721275042263,
+      "singleton_accuracy": 0.9810606060606061,
+      "matches_per_entity": 2.8244448136456777
+    },
+    {
+      "threshold": 0.88,
+      "macro_f05": 0.9161081555860158,
+      "singleton_accuracy": 0.9820075757575758,
+      "matches_per_entity": 2.7965885806058592
+    },
+    {
+      "threshold": 0.9,
+      "macro_f05": 0.9125352675742685,
+      "singleton_accuracy": 0.9848484848484849,
+      "matches_per_entity": 2.7627512875893006
+    },
+    {
+      "threshold": 0.92,
+      "macro_f05": 0.907926775043126,
+      "singleton_accuracy": 0.9857954545454546,
+      "matches_per_entity": 2.7226560336711523
+    },
+    {
+      "threshold": 0.9400000000000001,
+      "macro_f05": 0.9004717001225147,
+      "singleton_accuracy": 0.9886363636363636,
+      "matches_per_entity": 2.6648945007476326
+    },
+    {
+      "threshold": 0.9600000000000001,
+      "macro_f05": 0.8875329067533896,
+      "singleton_accuracy": 0.9914772727272727,
+      "matches_per_entity": 2.570748186298942
+    },
+    {
+      "threshold": 0.98,
+      "macro_f05": 0.8525717278208312,
+      "singleton_accuracy": 0.9971590909090909,
+      "matches_per_entity": 2.3571468128703548
+    },
+    {
+      "threshold": 0.99,
+      "macro_f05": 0.8063045757734303,
+      "singleton_accuracy": 0.9981060606060606,
+      "matches_per_entity": 2.1042255081131973
+    },
+    {
+      "threshold": 0.995,
+      "macro_f05": 0.7484889841609919,
+      "singleton_accuracy": 1.0,
+      "matches_per_entity": 1.830038212327629
+    },
+    {
+      "threshold": 0.999,
+      "macro_f05": 0.5555725482336851,
+      "singleton_accuracy": 1.0,
+      "matches_per_entity": 1.1242731350722712
+    }
+  ],
+  "feature_importance_gain": {
+    "address_sorted_jaro": 52190288.4346171,
+    "name_sorted_jaro": 42583747.771463156,
+    "address_jaro": 36293777.411928296,
+    "latin_address_token_overlap": 9726110.959303617,
+    "name_token_overlap": 6685207.151742697,
+    "latin_address_sorted_jaro": 4835916.302070081,
+    "address_len_ratio": 3999530.3117450476,
+    "latin_name_jaro": 2782488.816811919,
+    "name_edit": 2154357.2589487433,
+    "address_token_overlap": 1216308.4819235802,
+    "name_len_ratio": 1081198.760059595,
+    "number_conflict": 999547.4823374748,
+    "address_number_overlap": 803687.1336125135,
+    "latin_name_sorted_jaro": 802582.4849553704,
+    "latin_name_token_overlap": 521228.40614682436,
+    "name_jaro": 467507.63159918785,
+    "latin_name_edit": 333863.01655733585,
+    "name_contains": 247111.7590932846,
+    "address_number_disjoint": 236024.18078184128,
+    "latin_name_contains": 108542.91343206167,
+    "address_missing": 106687.47789382935,
+    "number_equal": 88025.97394704819,
+    "target_source3": 59430.283044576645,
+    "address_contains": 36202.76948940754,
+    "name5_equal": 19490.156316280365,
+    "name4_equal": 14042.967858076096,
+    "city_equal": 10251.191478729248,
+    "name_exact": 7769.582399368286,
+    "name_missing": 1058.643310546875,
+    "address_exact": 535.294819355011
+  },
+  "elapsed_seconds": 337.91461850000087
+}

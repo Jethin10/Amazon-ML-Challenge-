@@ -1,0 +1,27 @@
+{
+  "entities": 21921,
+  "true_links": 76101,
+  "candidate_pairs": 2839414,
+  "true_links_retrieved": 71975,
+  "candidate_recall": 0.9457825784155267,
+  "candidates_per_entity": 129.52940103097487,
+  "threshold": 0.7000000000000001,
+  "prediction_early_stop": true,
+  "macro_f05": 0.9249162693706643,
+  "singletons": 1224,
+  "correct_singletons": 1142,
+  "by_country": {
+    "india": {
+      "entities": 8761,
+      "macro_f05": 0.9057201300394334,
+      "true_links": 30374,
+      "candidate_recall": 0.9253637979851188
+    },
+    "us": {
+      "entities": 13160,
+      "macro_f05": 0.9376957052886667,
+      "true_links": 45727,
+      "candidate_recall": 0.9593456819821987
+    }
+  }
+}
