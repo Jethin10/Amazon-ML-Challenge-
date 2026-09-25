@@ -39,3 +39,12 @@ These are local scores, not leaderboard scores. France exists only in the
 unlabeled test set, so no local France score is available. The 98% candidate
 recall goal is not met; V4 reaches 94.58% on the fresh holdout. The private
 leaderboard may differ because its entity and country mix is unknown.
+
+## Full test output
+
+V4 inference wrote 1,732,544 Source 1 rows, 201,717,297 candidate pairs,
+and 5,994,946 selected matches across Source 2 and Source 3. The full-file
+validator checked every row and target ID, found no missing or duplicate
+Source 1 rows, and confirmed every selected match is in its candidate list.
+The validator reported `ok: true` with no errors. These unlabeled test counts
+do not measure accuracy or recall.
