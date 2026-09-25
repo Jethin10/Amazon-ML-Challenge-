@@ -1,3 +1,69 @@
+# Astralis: Amazon ML Challenge 2026
+
+This repository contains our business entity resolution solution. The current
+submission is **V4**: it retrieves Source 2 and Source 3 candidates for every
+Source 1 business, scores the pairs with LightGBM, and writes the two required
+TSVs. The supplied challenge dataset and generated outputs stay local; the
+trained V4 model, source, and pinned dependencies are in Git.
+
+## Current result
+
+| Measure | V3 | V4 |
+| --- | ---: | ---: |
+| Candidate recall on fresh labeled holdout | 92.73% | **94.58%** |
+| Macro F0.5 on the same holdout | 0.9143 | **0.9249** |
+| Candidates per Source 1 | 119.8 | 129.5 |
+
+The holdout has 21,921 Source 1 records and 76,101 true links. It was not used
+to fit V4 or choose its 0.70 threshold. These are **local** results, not a
+leaderboard score. Training labels cover the US and India; the test set also
+contains France, so its accuracy cannot be measured locally. See
+[V4_RESULTS.md](V4_RESULTS.md) for counts, country results, and limitations.
+
+## Upload files
+
+After inference, use the following **local** files. They are ignored by Git:
+
+| Portal field | File |
+| --- | --- |
+| Upload Matching Results File | `output_v4/matching_results.tsv` |
+| Upload Code File | `submission/Astralis_v4_code.zip` |
+| Final package, when requested | `submission/Astralis_v4_submission.zip` |
+
+The matching TSV has exactly 1,732,544 Source 1 rows and is 99,716,074 bytes.
+The candidate TSV is `output_v4/candidate_pairs.tsv`; it is included in the
+final package and is **not** the leaderboard prediction upload. The small code
+ZIP contains the trained model and reproducible source. The full package also
+contains both output TSVs and the methodology document.
+
+If the portal cannot process the original matching TSV, the separately
+validated `output_v4_portal/matching_results.tsv` is 93,268,009 bytes. Create
+it with `python src/make_portal_variant.py --cap 10`. It caps unusually long
+match lists, mostly in France; because France has no labeled holdout, its
+hidden score is uncertain. Keep the original as the primary result. The
+challenge statement below does not specify a portal file-size limit.
+
+## Reproduce V4
+
+Use Python 3.14 and install `requirements.txt`. Place the four training TSVs
+under `dataset/train/` and the three test source TSVs under `dataset/test/`.
+The full training and inference commands are in
+[V4_REPRODUCTION.md](V4_REPRODUCTION.md). The repository includes
+`models/v4_lgb.txt` for inference without retraining. From the repository
+root, validate the generated outputs and build the two packages with:
+
+```powershell
+.venv\Scripts\python.exe src/validate_large.py --output-dir output_v4
+.venv\Scripts\python.exe src/package_code.py --version v4
+.venv\Scripts\python.exe src/package_submission.py --version v4 --team Astralis
+```
+
+The full-file validator confirmed all 1,732,544 rows, valid S2/S3 IDs, no
+duplicates, and that every predicted match appears in its candidate list.
+The original challenge statement follows for reference.
+
+---
+
 # ML Challenge 2026 Problem Statement
 
 ## Business Entity Resolution Challenge
