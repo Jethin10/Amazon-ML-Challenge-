@@ -16,7 +16,7 @@ from v3_features import ALL_FEATURE_NAMES as FEATURE_NAMES
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--early-stop", action="store_true")
-    parser.add_argument("--mode", choices=["audit", "audit2"], default="audit2")
+    parser.add_argument("--mode", choices=["audit", "audit2", "audit3"], default="audit2")
     args = parser.parse_args()
     con = connect()
     make_work_s1(con, "train", args.mode)
