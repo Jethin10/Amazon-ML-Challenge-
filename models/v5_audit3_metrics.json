@@ -1,0 +1,21 @@
+{
+  "mode": "audit3",
+  "entities": 21878,
+  "true_links": 76167,
+  "candidate_pairs": 2828283,
+  "candidate_recall": 0.9448448803287512,
+  "threshold": 0.6250000000000002,
+  "macro_f05": 0.9367500709291156,
+  "by_country": {
+    "india": {
+      "entities": 8723,
+      "macro_f05": 0.9145397382030767,
+      "candidate_recall": 0.9206479595189591
+    },
+    "us": {
+      "entities": 13155,
+      "macro_f05": 0.9514776066470356,
+      "candidate_recall": 0.9609472372247612
+    }
+  }
+}

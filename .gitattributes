@@ -1,0 +1,2 @@
+# Preserve LightGBM model bytes across Windows and Unix checkouts.
+models/*_lgb.txt -text -diff

@@ -7,6 +7,11 @@ output/
 output_v3/
 output_v4/
 output_v4_portal/
+output_v5*/
+output_v5_france_summary.json
 submission/
-models/
+models/*
+!models/v5_lgb.txt
+!models/v5_metrics.json
+!models/v5_audit3_metrics.json
 work/

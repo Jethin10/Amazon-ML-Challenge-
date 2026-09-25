@@ -7,9 +7,19 @@ from zipfile import ZipFile, ZIP_DEFLATED
 from v1 import ROOT
 
 
+V5_SOURCES = (
+    "v1.py", "v2.py", "v3_features.py", "v4.py", "v5_features.py",
+    "build_latin.py", "predict_v4.py", "generate_v5_candidates.py",
+    "train_v4.py", "train_v5.py", "audit_v5.py", "predict_v5.py",
+    "run_v5_batches.py", "split_quarter.py", "split_eighth.py",
+    "merge_v5_parts.py", "validate_large.py", "package_code.py",
+    "package_submission.py", "watch_v5_progress.py",
+)
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--version", choices=["v1", "v3", "v4"], default="v1")
+    parser.add_argument("--version", choices=["v1", "v3", "v4", "v5"], default="v1")
     args = parser.parse_args()
     name = ("Astralis_code.zip" if args.version == "v1"
             else f"Astralis_{args.version}_code.zip")
@@ -17,6 +27,7 @@ def main() -> None:
     code_root = Path("code") / "business_entity_resolution"
     method = ("V1_DOCUMENTATION.md" if args.version == "v1"
               else "V3_REPRODUCTION.md" if args.version == "v3"
+              else "V5_DOCUMENTATION.md" if args.version == "v5"
               else "Documentation_template.md")
     files = [
         (ROOT / method, Path("Documentation_template.md")),
@@ -31,7 +42,13 @@ def main() -> None:
     if args.version != "v1":
         results = f"{args.version.upper()}_RESULTS.md"
         files.append((ROOT / results, code_root / results))
-    files.extend((source, code_root / "src" / source.name) for source in (ROOT / "src").glob("*.py"))
+    if args.version == "v5":
+        files.append((ROOT / "models" / "v5_audit3_metrics.json",
+                      code_root / "models" / "v5_audit3_metrics.json"))
+        sources = [ROOT / "src" / name for name in V5_SOURCES]
+    else:
+        sources = list((ROOT / "src").glob("*.py"))
+    files.extend((source, code_root / "src" / source.name) for source in sources)
     for source, _ in files:
         if not source.is_file():
             raise FileNotFoundError(source)
