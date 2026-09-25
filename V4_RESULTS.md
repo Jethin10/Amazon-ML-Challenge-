@@ -48,3 +48,16 @@ validator checked every row and target ID, found no missing or duplicate
 Source 1 rows, and confirmed every selected match is in its candidate list.
 The validator reported `ok: true` with no errors. These unlabeled test counts
 do not measure accuracy or recall.
+
+## Portal size fallback
+
+`src/make_portal_variant.py --cap 10` makes a separate leaderboard TSV in
+`output_v4_portal/` by retaining the first 10 selected IDs on rows with longer
+lists. It keeps all 1,732,544 Source 1 rows and passed the organizers' matching
+validator with ID checks. Its size is 93,268,009 bytes versus 99,716,074 for
+the original. On the labeled audit2 slice, the same list cap changed macro
+F0.5 from 0.924916 to 0.924921. Most removed test predictions are in France,
+which has no labeled validation data. Therefore the audit result does not
+establish the portal variant's France or hidden leaderboard performance.
+Keep the original full output as the primary model result; use the fallback
+only if the portal cannot process the original file.
