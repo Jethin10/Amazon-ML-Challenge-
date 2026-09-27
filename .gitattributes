@@ -2,3 +2,4 @@
 models/*_lgb.txt -text -diff
 models/v6_reranker/tokenizer.json filter=lfs diff=lfs merge=lfs -text
 models/v6_reranker/*.safetensors filter=lfs diff=lfs merge=lfs -text
+output_v8/matching_results.tsv -text -diff
