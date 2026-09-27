@@ -17,9 +17,13 @@ on validation loss. Buckets 2-41 fit the model and buckets 42-49 select its
 | India macro F0.5 | 0.90095 | 0.91454 |
 | US macro F0.5 | 0.93933 | 0.95148 |
 
-These figures are from provided training labels. The public V4 submission
-scored 0.896. V5's public score is unknown until a portal evaluation. France
-has no labeled training data, and the local audit does not estimate its score.
+These figures are from provided training labels. The public portal scored V4
+at 0.896 and V5 at 0.907. A complete output that keeps V5 predictions for the
+US and India but raises the France threshold from 0.625 to 0.80 scored 0.913.
+That output removed 181,509 France predictions and passed the full structural
+validator. France has no labeled training data, so the local audit does not
+estimate its accuracy. The public score should not be treated as a private
+holdout result.
 
 Full test output passed the complete structural validator. Validation summary:
 

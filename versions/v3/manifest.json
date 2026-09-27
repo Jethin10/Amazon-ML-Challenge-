@@ -1,0 +1,10 @@
+{
+  "version": "v3",
+  "purpose": "Expanded candidate features",
+  "entrypoints": [
+    "src/v3_features.py",
+    "src/train_v3.py",
+    "src/predict_v3.py"
+  ],
+  "output": "output_v3/matching_results.tsv"
+}

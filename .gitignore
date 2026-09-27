@@ -8,6 +8,7 @@ output_v3/
 output_v4/
 output_v4_portal/
 output_v5*/
+output_v6*/
 output_v5_france_summary.json
 submission/
 models/*
@@ -15,3 +16,7 @@ models/*
 !models/v5_metrics.json
 !models/v5_audit3_metrics.json
 work/
+*.log
+output_v7*/
+output_v9*/
+output_v8/candidate_pairs.tsv

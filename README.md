@@ -1,60 +1,69 @@
 # Astralis: Amazon ML Challenge 2026
 
-This repository contains our business entity resolution solution. The current
-submission is **V5**: it retrieves Source 2 and Source 3 candidates for every
-Source 1 business, scores the pairs with LightGBM, and writes the two required
-TSVs. The supplied challenge dataset and generated outputs stay local; the
-trained V5 model, source, and pinned dependencies are in Git.
+This repository contains the Astralis business entity resolution pipeline.
+The final V8 route combines LightGBM retrieval, multilingual transformer
+reranking, target exclusivity, and high confidence France suffix recovery.
+The supplied challenge dataset and large intermediate outputs stay local.
 
 ## Current result
 
-| Measure | V4 | V5 |
+| Release | Local audit3 macro F0.5 | Public leaderboard |
 | --- | ---: | ---: |
-| Candidate recall on fresh labeled holdout | 94.48% | 94.48% |
-| Macro F0.5 on the same holdout | 0.92402 | **0.93675** |
-| India macro F0.5 | 0.90095 | **0.91454** |
-| US macro F0.5 | 0.93933 | **0.95148** |
+| V4 | 0.92402 | 0.896 |
+| V5 | 0.93675 | 0.907 |
+| V5 France 0.80 | 0.93675 | 0.913 |
+| V6 selected rerank | 0.94728 | **0.927** |
+| V7 full rerank | 0.95956 | Pending |
+| V8 final route | **0.95958** | Pending |
+| Retrieval experiment | 0.96561 | Not materialized |
 
-The fresh holdout has 21,878 Source 1 records and 76,167 true links. It was
-not used to fit V5 or choose its threshold. These are **local** results, not a
-leaderboard score. The V4 public submission scored 0.896. Training labels
-cover the US and India; the test set also contains France, so its accuracy
-cannot be measured locally. See [V5_RESULTS.md](V5_RESULTS.md) for details.
+The holdout contains 21,878 Source 1 records and 76,167 true links. Local
+scores are separate from leaderboard results. Training labels cover the US
+and India; France appears only in test data, so its accuracy cannot be scored
+locally. See [V8_RESULTS.md](V8_RESULTS.md) for the final measurements and
+their limits.
+
+## Repository map
+
+Release routes are indexed under [`versions/`](versions/README.md). Each of
+`versions/v1` through `versions/v8` has its own README and machine readable
+manifest. Canonical shared implementation stays in `src/`, trained artifacts
+stay in `models/`, orchestration commands stay in `scripts/`, and submission
+validation stays in `utils/`.
 
 ## Upload files
 
-After inference, use the following **local** files. They are ignored by Git:
+Use these final files:
 
 | Portal field | File |
 | --- | --- |
-| Upload Matching Results File | `output_v5/matching_results.tsv` |
-| Upload Code File | `submission/Astralis_v5_code.zip` |
-| Final package, when requested | `submission/Astralis_v5_submission.zip` |
+| Upload Matching Results File | `output_v8/matching_results.tsv` |
+| Compatibility copy | `output/matching_result.tsv` |
+| Upload Code File | `submission/Astralis_v8_code.zip` |
+| Final package | `submission/Astralis_submission.zip` |
 
 The matching TSV has exactly 1,732,544 Source 1 rows. The candidate TSV is
-`output_v5/candidate_pairs.tsv`; it is included in the
-final package and is **not** the leaderboard prediction upload. The small code
-ZIP contains the trained model and reproducible source. The full package also
-contains both output TSVs and the methodology document.
+`output_v8/candidate_pairs.tsv` and is included in the final archive; it is
+not the leaderboard prediction upload. See
+[V8_REPRODUCTION.md](V8_REPRODUCTION.md) for the final route.
 
-## Reproduce V5
+## Reproduce V8
 
-Use Python 3.14 and install `requirements.txt`. Place the four training TSVs
+Use Python 3.14 and install `requirements-v6.txt`. Place the four training TSVs
 under `dataset/train/` and the three test source TSVs under `dataset/test/`.
-The full training and inference commands are in
-[V5_REPRODUCTION.md](V5_REPRODUCTION.md). The repository includes
-`models/v5_lgb.txt` for inference without retraining. From the repository
-root, validate the generated outputs and build the two packages with:
+The full commands are in [V8_REPRODUCTION.md](V8_REPRODUCTION.md). The
+repository includes the trained LightGBM and transformer artifacts. From the
+repository root, validate the output and build the two packages with:
 
 ```powershell
-.venv\Scripts\python.exe src/validate_large.py --output-dir output_v5
-.venv\Scripts\python.exe src/package_code.py --version v5
-.venv\Scripts\python.exe src/package_submission.py --version v5 --team Astralis
+.venv\Scripts\python.exe src/validate_large.py --output-dir output_v8
+.venv\Scripts\python.exe src/package_code.py --version v8
+.venv\Scripts\python.exe src/package_submission.py --version v8 --team Astralis --already-validated
 ```
 
-The full-file validator confirmed all 1,732,544 rows, valid S2/S3 IDs, no
-duplicates, and that every predicted match appears in its candidate list.
-The original challenge statement follows for reference.
+The full-file validator checks all Source 1 rows, valid target IDs, duplicate
+IDs, and the match subset relationship. The original challenge statement
+follows for reference.
 
 ---
 

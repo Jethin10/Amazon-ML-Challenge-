@@ -1,0 +1,10 @@
+{
+  "base_model": "cross-encoder/mmarco-mMiniLMv2-L12-H384-v1",
+  "train_split": "valid",
+  "rows": 53150,
+  "epochs": 1,
+  "batch_size": 8,
+  "max_length": 128,
+  "steps": 6644,
+  "seconds": 1483.6
+}

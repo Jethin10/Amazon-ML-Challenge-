@@ -1,0 +1,10 @@
+{
+  "version": "v1",
+  "purpose": "Baseline matching",
+  "entrypoints": [
+    "src/v1.py",
+    "src/train_v1.py",
+    "src/predict_v1.py"
+  ],
+  "output": "output/matching_results.tsv"
+}
