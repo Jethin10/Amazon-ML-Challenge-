@@ -1,0 +1,10 @@
+{
+  "version": "v2",
+  "purpose": "Improved features and audit",
+  "entrypoints": [
+    "src/v2.py",
+    "src/train_v2.py",
+    "src/audit_v2.py"
+  ],
+  "output": "output_v2/matching_results.tsv"
+}

@@ -1,0 +1,9 @@
+{
+  "base_output": "output_v7_target_exclusive",
+  "scored_pairs": "work\\france_suffix_unassigned_a70_scored.parquet",
+  "threshold": 5.75,
+  "matching_rows": 1732544,
+  "candidate_rows": 1732544,
+  "matches_added": 4484,
+  "candidates_added": 21818
+}

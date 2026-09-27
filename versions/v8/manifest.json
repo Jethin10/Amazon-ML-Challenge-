@@ -1,0 +1,10 @@
+{
+  "version": "v8",
+  "purpose": "Final exclusivity and France recovery",
+  "entrypoints": [
+    "src/predict_v7_full.py",
+    "src/apply_target_exclusivity.py",
+    "src/merge_retrieval_additions.py"
+  ],
+  "output": "output_v8/matching_results.tsv"
+}

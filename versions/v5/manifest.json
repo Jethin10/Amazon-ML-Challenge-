@@ -1,0 +1,10 @@
+{
+  "version": "v5",
+  "purpose": "Scalable candidate pipeline",
+  "entrypoints": [
+    "src/v5_features.py",
+    "src/train_v5.py",
+    "src/predict_v5.py"
+  ],
+  "output": "output_v5/matching_results.tsv"
+}

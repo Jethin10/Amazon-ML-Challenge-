@@ -1,0 +1,10 @@
+{
+  "version": "v4",
+  "purpose": "Stronger LightGBM baseline",
+  "entrypoints": [
+    "src/v4.py",
+    "src/train_v4.py",
+    "src/predict_v4.py"
+  ],
+  "output": "output_v4/matching_results.tsv"
+}

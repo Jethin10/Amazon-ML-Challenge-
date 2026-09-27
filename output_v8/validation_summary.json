@@ -1,0 +1,9 @@
+{
+  "ok": true,
+  "source1_rows": 1732544,
+  "expected_source1_rows": 1732544,
+  "candidate_pairs": 201739115,
+  "matched_pairs": 5482339,
+  "empty_predictions": 110251,
+  "errors": []
+}

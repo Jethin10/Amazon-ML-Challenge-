@@ -16,3 +16,7 @@ models/*
 !models/v5_metrics.json
 !models/v5_audit3_metrics.json
 work/
+*.log
+output_v7*/
+output_v9*/
+output_v8/candidate_pairs.tsv
